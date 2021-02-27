@@ -1,22 +1,15 @@
 import * as blessed from 'blessed';
 
-import { ComponentPosition, ComponentSize } from './component-types';
-import { IElementPosition, IElementSize } from '../modals/base-modal';
+import { ComponentPosition, ComponentSize, ComponentPadding } from './component-types';
 
 
 /** Log Interfaces **/
 interface ILogStyle {
     border: { fg: string; };
-    focus: { fg: string };
+    focus: { fg: string; };
 }
 interface ILogBorder {
     type: string;
-}
-interface ILogPadding {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
 }
 interface ILog {
     parent?: blessed.Widgets.Node;
@@ -32,7 +25,7 @@ interface ILog {
     tags?: boolean;
     border?: ILogBorder;
     style?: ILogStyle;
-    padding?: ILogPadding;
+    padding?: ComponentPadding;
 }
 
 
@@ -51,7 +44,7 @@ class Log implements ILog {
     tags?: boolean;
     border?: ILogBorder;
     style?: ILogStyle;
-    padding?: ILogPadding;
+    padding?: ComponentPadding;
 
     constructor(log: ILog) {
         Object.assign(this, log);
@@ -83,7 +76,7 @@ export class LogBuilder implements Partial<Log> {
         border: { fg: 'black' },
         focus: { fg: 'black' }
     };
-    padding?: ILogPadding = {
+    padding?: ComponentPadding = {
         top: 0,
         right: 1,
         bottom: 0,
@@ -98,10 +91,10 @@ export class LogBuilder implements Partial<Log> {
     public withLabel(label: string): this & Required<Pick<Log, 'label'>> {
         return Object.assign(this, { label: ` ${label} ` });
     }
-    public withPosition(position: IElementPosition): this & Required<Pick<Log, 'position'>> {
+    public withPosition(position: ComponentPosition): this & Required<Pick<Log, 'position'>> {
         return Object.assign(this, { position });
     }
-    public withSize(size: IElementSize): this & Required<Pick<Log, 'size'>> {
+    public withSize(size: ComponentSize): this & Required<Pick<Log, 'size'>> {
         return Object.assign(this, { size });
     }
 

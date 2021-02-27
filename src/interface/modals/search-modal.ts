@@ -1,9 +1,8 @@
 import * as blessed from 'blessed';
 
-import { BaseModal, IBaseModalHandlers, IElementPosition, IElementSize } from './base-modal';
-
+import { ComponentPosition, ComponentSize } from './../components/component-types';
+import { BaseModal, IBaseModalHandlers } from './base-modal';
 import { LogBuilder } from './../components/log';
-
 
 
 export interface ISearchModalHandlers extends IBaseModalHandlers {
@@ -41,14 +40,11 @@ export class SearchModal extends BaseModal {
             .withLabel('Log')
             .withParent(this._modalForm)
             .withPosition({ top: 0 })
-            .withSize({
-                width: this.modalContentWidth,
-                height: 3
-            })
+            .withSize({ width: this.modalContentWidth, height: 3 })
             .build();
 
         /** Search Box **/
-        // this._searchBox = this.createTextBox(this._modalForm, 'Shopify Store', <IElementPosition>{ top: 0 });
+        // this._searchBox = this.createTextBox(this._modalForm, 'Shopify Store', <ComponentPosition>{ top: 0 });
         // this._searchBox.key('enter', () => {
         //     searchButton.focus();
         //     this.screen.render();
@@ -85,8 +81,8 @@ export class SearchModal extends BaseModal {
         /** Search Button **/
         let searchButton = this.createFormButton(this._modalForm,
             'SEARCH',
-            <IElementPosition>{ bottom: 1, left: 0 },
-            <IElementSize>{ width: '50%-1' }
+            <ComponentPosition>{ bottom: 1, left: 0 },
+            <ComponentSize>{ width: '50%-1' }
         );
         /** Return { 'Shopify Store': '[result]' } **/
         searchButton.on('press', () => this.destroyModal({

@@ -1,20 +1,12 @@
 import * as blessed from 'blessed';
 import * as colors from 'colors';
 
+import { ComponentPosition, ComponentSize } from './../components/component-types';
+import { ModalBoxBuilder } from './../modal-components/modal-box';
+
 
 export interface IBaseModalHandlers {
   closeHandler: (data: any) => void;
-}
-
-export type IElementPosition = {
-  top?: number,
-  right?: number,
-  bottom?: number,
-  left?: number,
-}
-export type IElementSize = {
-  width?: number|string,
-  height?: number
 }
 
 
@@ -79,31 +71,21 @@ export class BaseModal {
     if (modalBoxWidth) this.setModalBoxWidth(modalBoxWidth);
     if (modalBoxHeight) this.setModalBoxHeight(modalBoxHeight);
     this.closeHandler = handlers.closeHandler;
-    this._modalBox = this.createModalBox();
+
+    /** Box Layout **/
+    this._modalBox = new ModalBoxBuilder()
+      .withParent(screen)
+      .withSize({ width: this.modalBoxWidth, height: this.modalBoxHeight })
+      .withPosition({ top: 'center', left: 'center' })
+      .withDraggable()
+      .build();
+
   }
 
   protected destroyModal(data: any) {
     this._modalBox.destroy();
     this.closeHandler(data);
     this.screen.render();
-  }
-
-  protected createModalBox() {
-    return blessed.layout({
-      draggable: true,
-      layout: 'inline',
-      parent: this.screen,
-      top: 'center',
-      left: 'center',
-      width: this.modalBoxWidth,
-      height: this.modalBoxHeight,
-      border: 'line',
-      style: {
-        border: {
-          fg: this.borderColor
-        }
-      }
-    });
   }
 
   protected createModalForm(modalBox: blessed.Widgets.Node) {
@@ -122,8 +104,8 @@ export class BaseModal {
   protected createLog(
     form: blessed.Widgets.Node,
     label: string,
-    position: IElementPosition = { top: 1 },
-    size: IElementSize = { width: this.modalContentWidth, height: 3 }): any
+    position: ComponentPosition = { top: 1 },
+    size: ComponentSize = { width: this.modalContentWidth, height: 3 }): any
   {
     return blessed.log({
       parent: form,
@@ -154,8 +136,8 @@ export class BaseModal {
   protected createBox(
     form: blessed.Widgets.Node,
     label: string,
-    position: IElementPosition = { top: 1 },
-    size: IElementSize = { width: this.modalContentWidth, height: 3 }
+    position: ComponentPosition = { top: 1 },
+    size: ComponentSize = { width: this.modalContentWidth, height: 3 }
     ): blessed.Widgets.BoxElement
   {
     return blessed.box({
@@ -186,8 +168,8 @@ export class BaseModal {
   protected createTextBox(
     form: blessed.Widgets.Node,
     label: string,
-    position: IElementPosition = { top: 1 },
-    size: IElementSize = { width: this.modalContentWidth, height: 3 }): blessed.Widgets.TextboxElement
+    position: ComponentPosition = { top: 1 },
+    size: ComponentSize = { width: this.modalContentWidth, height: 3 }): blessed.Widgets.TextboxElement
   {
     return blessed.textbox({
       label: ` ${this.formatLabel(label)} `,
@@ -209,8 +191,8 @@ export class BaseModal {
   protected createFormButton(
     form: blessed.Widgets.Node,
     label: string,
-    position: IElementPosition = { bottom: 1 },
-    size: IElementSize = { width: this.modalContentWidth })
+    position: ComponentPosition = { bottom: 1 },
+    size: ComponentSize = { width: this.modalContentWidth })
   {
     return blessed.button({
       parent: form,

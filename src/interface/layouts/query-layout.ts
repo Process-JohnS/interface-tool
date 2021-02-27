@@ -1,9 +1,10 @@
+
 import { GridBoxBuilder } from './../components/grid-box';
 import { GridTableBuilder } from './../components/grid-table';
 
 import { UI } from './../ui';
 import { ISearchModalHandlers, SearchModal } from './../modals/search-modal';
-
+import { IStoreSelectModalHandlers, StoreSelectModal } from './../modals/store-select-modal';
 
 export class QueryLayout extends UI {
 
@@ -52,7 +53,7 @@ export class QueryLayout extends UI {
             box1.style.border.fg = 'cyan';
         });
 
-        /** Modals **/
+        /** Search Modals **/
         this._screen.key(['k'], () => new SearchModal(this._screen,
             <ISearchModalHandlers>{
 
@@ -70,6 +71,20 @@ export class QueryLayout extends UI {
 
             }
         ));
+
+        /** Store Select Modal **/
+        this._screen.key(['s'], () => new StoreSelectModal(this._screen,
+        <IStoreSelectModalHandlers>{
+
+            keypressHandler: (data) => {
+                box1.setContent(data['Shopify Store']);
+            },
+    
+            closeHandler: (data) => {
+                box1.setContent(data['Shopify Store']);
+            }
+    
+        }));
     }
 
 }
